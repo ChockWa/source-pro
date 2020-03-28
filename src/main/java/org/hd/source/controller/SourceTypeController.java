@@ -23,14 +23,14 @@ public class SourceTypeController {
         return Result.SUCCESS().setData("list", sourceTypeService.getSourceTypes());
     }
 
-    @GetMapping("add")
-    public Result add(String description){
+    @GetMapping("save")
+    public Result save(String description){
         SourceType sourceType = new SourceType();
         sourceType.setDescription(description);
         sourceType.setStatus(1);
         sourceType.setId(UUIDUtils.getUuid());
         sourceType.setCreateTime(new Date());
-        sourceTypeService.add(sourceType);
+        sourceTypeService.save(sourceType);
         return Result.SUCCESS();
     }
 }

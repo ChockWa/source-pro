@@ -21,7 +21,7 @@ public class SourceTypeService {
                 .selectList(Wrappers.<SourceType>lambdaQuery().ge(SourceType::getStatus, 0));
     }
 
-    public void add(SourceType sourceType){
+    public void save(SourceType sourceType){
         sourceTypeMapper.insert(sourceType);
     }
 }
