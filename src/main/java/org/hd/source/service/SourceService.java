@@ -70,15 +70,19 @@ public class SourceService {
             sourceMapper.insert(source);
 
             try {
-                String[] downloadInfos = sourceDto.getDownloadInfo().split("\\|");
+                String[] downloadInfos = sourceDto.getDownloadInfo().split(";");
                 for(String s : downloadInfos){
-                    String[] item = s.split(":");
                     DownloadInfo downloadInfo = new DownloadInfo();
                     downloadInfo.setStatus(1);
-                    downloadInfo.setDownloadUrl(item[0]);
-                    downloadInfo.setDownloadCode(item[1]);
                     downloadInfo.setSourceId(uuid);
                     downloadInfo.setCreateTime(new Date());
+                    if(s.contains(":")){
+                        String[] item = s.split(":");
+                        downloadInfo.setDownloadUrl(item[0]);
+                        downloadInfo.setDownloadCode(item[1]);
+                    }else{
+                        downloadInfo.setDownloadUrl(s);
+                    }
                     downloadInfoMapper.insert(downloadInfo);
                 }
             }catch (Exception e) {
@@ -94,13 +98,17 @@ public class SourceService {
             try {
                 String[] downloadInfos = sourceDto.getDownloadInfo().split("\\|");
                 for(String s : downloadInfos){
-                    String[] item = s.split(":");
                     DownloadInfo downloadInfo = new DownloadInfo();
                     downloadInfo.setStatus(1);
-                    downloadInfo.setDownloadUrl(item[0]);
-                    downloadInfo.setDownloadCode(item[1]);
-                    downloadInfo.setSourceId(source.getId());
                     downloadInfo.setCreateTime(new Date());
+                    downloadInfo.setSourceId(source.getId());
+                    if(s.contains(":")){
+                        String[] item = s.split(":");
+                        downloadInfo.setDownloadUrl(item[0]);
+                        downloadInfo.setDownloadCode(item[1]);
+                    }else{
+                        downloadInfo.setDownloadUrl(s);
+                    }
                     downloadInfoMapper.insert(downloadInfo);
                 }
             }catch (Exception e) {
