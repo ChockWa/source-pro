@@ -51,9 +51,9 @@ public class SourceService {
         StringBuilder downloadInfoStr = new StringBuilder();
         for(DownloadInfo downloadInfo : downloadInfoList){
             downloadInfoStr.append(downloadInfo.getDownloadUrl());
-            downloadInfoStr.append(":");
-            downloadInfoStr.append(downloadInfo.getDownloadCode());
             downloadInfoStr.append("|");
+            downloadInfoStr.append(downloadInfo.getDownloadCode());
+            downloadInfoStr.append(";");
         }
         String str = downloadInfoStr.toString();
         sourceDto.setDownloadInfo(str.substring(0, str.length() - 1));
