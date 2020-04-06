@@ -62,6 +62,6 @@
     }
     ul li a:hover {
         cursor: pointer;
-        color: #fff;
+        color: #bbb;
     }
 </style>

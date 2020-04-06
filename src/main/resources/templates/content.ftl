@@ -31,7 +31,7 @@
                 <hr>
                 <div style="text-align: center;line-height: 40px;">
                     <button type="button" class="layui-btn layui-btn-sm">现在注册</button>
-                    <div>已有账号？<a style="color: #555555;">登录</a></div>
+                    <div>已有账号？<a>登录</a></div>
                 </div>
             </div>
         </div>
@@ -68,7 +68,11 @@
 }
 .c_menu_nav {
 }
+div a {
+    color: #555555
+}
 a:hover {
+    color: #bbb;
     cursor: pointer;
 }
 .c_source {
