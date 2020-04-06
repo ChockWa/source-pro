@@ -26,7 +26,7 @@ public class PageController {
         var sourceInfo = sourceService.getSourceListPage(new PageParam(1, 15));
 
         ModelAndView mv = new ModelAndView("index");
-        mv.addObject("requestPrefix", "http://localhost:16989");
+        mv.addObject("requestPrefix", "http://106.12.161.232:16989");
         mv.addObject("types", types);
         mv.addObject("sourceInfo", sourceInfo);
         return mv;
