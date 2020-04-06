@@ -14,16 +14,17 @@
                 <ul class="layui-nav" lay-filter="">
                     <#list types as item >
                         <#if item.isChoose == 1>
-                            <li class="layui-nav-item layui-this"><a href="">${item.description}</a></li>
+                            <li class="layui-nav-item layui-this"><a href="#">${item.description}</a></li>
                         <#else>
-                            <li class="layui-nav-item"><a href="">${item.description}</a></li>
+                            <li class="layui-nav-item"><a href="#">${item.description}</a></li>
                         </#if>
                     </#list>
                 </ul>
             </div>
-            <div class="c_source">
-                <#include "source.list.ftl">
+            <div id="c_source" class="c_source">
+<#--                <#include "source.list.ftl">-->
             </div>
+            <div id="pageId" style="text-align: center;"></div>
         </div>
         <div class="c_box_right">
             <div class="c_right_my">
@@ -41,7 +42,78 @@
 </html>
 <script src="../static/layui/layui.js"></script>
 <script>
+    (function () {
+        getSourcePage(1, 15)
+    })()
 
+    function getPageInfo(pageIndex, pageSize, total) {
+        layui.use(['laypage'], function(){
+            var laypage = layui.laypage;
+
+            //总页数大于页码总数
+            laypage.render({
+                elem: 'pageId',
+                limit: pageSize,
+                curr : pageIndex||1,
+                count: total,
+                jump: function(obj, first) {
+                    if(!first){
+                        getSourcePage(obj.curr, obj.limit)
+                    }
+                }
+            });})
+    }
+
+
+    function getSourcePage(pageIndex, pageSize) {
+        $.ajax({
+            url: "${requestPrefix}" + "/source/simpleSourcePage",
+            type:"Get",
+            data: {pageIndex: pageIndex, pageSize: pageSize},
+            contentType: "application/json;charset=utf-8",
+            dataType:"json",
+            success: async function(data){
+                console.log(data);
+                if(data){
+                    let list = data.data.records
+                    if(list.length > 0){
+                        let html = ''
+                        for(let i in list){
+                            var content = '<div class="c_list_item">\n' +
+                                '<div class="c_item_img">' +
+                                '<img src=' + list[i].cover + '>' +
+                                '</div>' +
+                                '<div class="c_item_info">' +
+                                '<div>' +
+                                '<div class="c_item_title">' + list[i].title + '</div>' +
+                                '<div class="c_item_desc">' + list[i].description + '</div>' +
+                                '</div>' +
+                                '<div class="c_item_scan_desc">浏览量：' + list[i].scanCount + '</div>' +
+                                '</div>' +
+                                '</div>'
+                            html = html + content
+                        }
+                        $("#c_source").html(html)
+                    }
+                    getPageInfo(pageIndex, pageSize, data.data.total)
+                }
+            },
+            error:function(data){
+                error(data.msg);
+            }
+        });
+    }
+    function error(msg){
+        layui.use(["layer"], function () {
+            let layer = layui.layer;
+            layer.open({
+                type: 0,
+                title:"错误",
+                btn: ["确定"],
+                content: msg
+            })
+        })
+    }
 </script>
 <style>
 .c_content {
@@ -100,5 +172,49 @@ a:hover {
 }
 .layui-btn {
     background-color: #D0021B;
+}
+.c_list_item {
+    width: 780px;
+    height: 160px;
+    margin: 0px auto;
+    padding: 12px 0 12px 0;
+    border-top: 1px solid #ededed;
+    display: flex;
+    justify-content: flex-start;
+}
+.c_list_item:hover {
+    background-color: #eeeeee;
+    opacity: 0.5;
+}
+.c_item_img {
+    width: 150px;
+    height: 150px;
+}
+.c_item_img img {
+    width: 150px;
+    height: 150px;
+}
+.c_item_info {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+.c_item_title {
+    font-size: 16px;
+    font-weight: 600;
+}
+.c_item_desc {
+    font-size: 14px;
+    color: #555555;
+}
+.c_item_scan_desc {
+    text-align: right;
+    color: #555555;
+    font-size: 12px;
+}
+.page_area {
+    text-align: center;
 }
 </style>
