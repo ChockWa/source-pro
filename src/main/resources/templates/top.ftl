@@ -51,7 +51,7 @@
     }
     ul {
         display: flex;
-        padding: 14px;
+        padding: 14px !important;
     }
     ul li {
         padding-right: 12px;
