@@ -1,5 +1,6 @@
 package org.hd.source.disruptor;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.TimeoutException;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -24,22 +25,17 @@ public class LogEventDisruptor {
 
     private static final int bufferSize = 1024;
 
-    private Disruptor<LogEvent> disruptor;
+    private volatile Disruptor<LogEvent> disruptor;
 
     private RingBuffer<LogEvent> ringBuffer;
 
-    @Autowired
-    private GroupLogMapper groupLogMapper;
+    private final GroupLogMapper groupLogMapper;
 
     @PostConstruct
     public synchronized void init(){
         if(disruptor == null){
-            disruptor = new Disruptor<>(new LogEventFactory(), bufferSize, new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "LogEventDisruptor-Thread");
-                }
-            });
+            disruptor = new Disruptor<>(new LogEventFactory(), bufferSize,
+                    new ThreadFactoryBuilder().setNameFormat("LogEventDisruptor-Thread").build());
             disruptor.handleEventsWithWorkerPool(new LogEventHandler(groupLogMapper));
             disruptor.setDefaultExceptionHandler(new LogEventExceptionHandler());
             ringBuffer = disruptor.start();
@@ -57,5 +53,9 @@ public class LogEventDisruptor {
         } catch (TimeoutException e) {
             log.error("LogEventDisruptor close time out", e);
         }
+    }
+
+    public LogEventDisruptor(GroupLogMapper groupLogMapper){
+        this.groupLogMapper = groupLogMapper;
     }
 }

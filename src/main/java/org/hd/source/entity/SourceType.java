@@ -1,8 +1,10 @@
 package org.hd.source.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +23,7 @@ public class SourceType {
     private String description;
     private Integer status;
     private Date createTime;
+    @JsonIgnore
+    @TableField(exist = false)
+    private int isChoose;
 }

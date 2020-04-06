@@ -37,4 +37,10 @@ public class SourceController {
         sourceService.updateStatus(sourceId, status);
         return Result.SUCCESS();
     }
+
+    @GetMapping("simpleSourcePage")
+    public Result simpleSourcePage(PageParam pageParam){
+        return Result.SUCCESS().setData(sourceService.simpleSourcePage(pageParam));
+    }
+
 }
