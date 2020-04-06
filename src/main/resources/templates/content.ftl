@@ -99,7 +99,11 @@
                 }
             },
             error:function(data){
-                error(data.msg);
+                if(!data){
+                    error("请求出现异常，请稍后再试！");
+                }else{
+                    error(data.msg);
+                }
             }
         });
     }
