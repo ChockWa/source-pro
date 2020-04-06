@@ -36,6 +36,7 @@
                 </div>
             </div>
         </div>
+        <button id="test" style="position:fixed;right:0;bottom:0">回到顶部</button>
     </div>
 </div>
 </body>
@@ -59,6 +60,7 @@
                 jump: function(obj, first) {
                     if(!first){
                         getSourcePage(obj.curr, obj.limit)
+                        document.body.scrollTop = document.documentElement.scrollTop = 0;
                     }
                 }
             });})
@@ -107,6 +109,11 @@
             }
         });
     }
+
+    test.onclick = function(){
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }
+
     function error(msg){
         layui.use(["layer"], function () {
             let layer = layui.layer;
