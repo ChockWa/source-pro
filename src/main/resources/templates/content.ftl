@@ -1,13 +1,5 @@
 <#assign types = types>
 <#assign pageType = pageType>
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
-    <meta charset="utf-8"/>
-    <title>简易群发工具</title>
-    <#include "header.ftl"/>
-</head>
-<body>
 <div class="c_content">
     <div class="c_content_box">
         <div class="c_box_left">
@@ -46,8 +38,6 @@
         <button id="test" style="position:fixed;right:0;bottom:0">回到顶部</button>
     </div>
 </div>
-</body>
-</html>
 <script src="../static/layui/layui.js"></script>
 <script>
     (function () {
