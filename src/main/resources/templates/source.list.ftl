@@ -9,21 +9,26 @@
 </head>
 <body>
 <div id="c_list" class="c_list">
-<#--    <div class="c_list_item">-->
-<#--        <div class="c_item_img">-->
-<#--            <img src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=82108016,1133623751&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=3464b52fd8de009c06fa649947f88e2b">-->
-<#--        </div>-->
-<#--        <div class="c_item_info">-->
-<#--            <div>-->
-<#--                <div class="c_item_title">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试?</div>-->
-<#--                <div class="c_item_desc">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试-->
-<#--                    测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试-->
-<#--                    测测试测试测试测试测试测试-->
-<#--                </div>-->
-<#--            </div>-->
-<#--            <div class="c_item_scan_desc">浏览量：20000&nbsp;|&nbsp;评论：1000</div>-->
-<#--        </div>-->
-<#--    </div>-->
+    <div class="c_list_item">
+        <div class="c_item_img">
+            <img src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=82108016,1133623751&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=3464b52fd8de009c06fa649947f88e2b">
+        </div>
+        <div class="c_item_info">
+            <div>
+                <div class="c_item_title">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试?</div>
+                <div class="c_item_desc">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+                    测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+                    测测试测试测试测试测试测试
+                </div>
+            </div>
+            <div class="c_item_info_bottom">
+                <div class="c_item_info_date">2020-04-08</div>
+                <div class="c_item_scan_desc">浏览量：20000&nbsp;
+                    <button type="button" class="layui-btn layui-btn-sm">阅读全文</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <#--    <div class="c_list_item">-->
 <#--        <div class="c_item_img">-->
 <#--            <img src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=82108016,1133623751&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=3464b52fd8de009c06fa649947f88e2b">-->
@@ -106,9 +111,9 @@
 
 <script src="../static/layui/layui.js"></script>
 <script>
-    (function () {
-        getSourcePage(1, 15)
-    })()
+    // (function () {
+    //     getSourcePage(1, 15)
+    // })()
 
     function getPageInfo(pageIndex, pageSize, total) {
         layui.use(['laypage'], function(){
@@ -143,18 +148,24 @@
                     if(list.length > 0){
                         let html = ''
                         for(let i in list){
-                            var content = '<div class="c_list_item">\n' +
+                            var content = '<div class="c_list_item">' +
                                 '<div class="c_item_img">' +
                                 '<img src=' + list[i].cover + '>' +
                                 '</div>' +
                                 '<div class="c_item_info">' +
                                 '<div>' +
-                                '<div class="c_item_title">' + list[i].title + '</div>' +
-                                '<div class="c_item_desc">' + list[i].description + '</div>' +
-                            '</div>' +
-                            '<div class="c_item_scan_desc">浏览量：' + list[i].scanCount + '</div>' +
-                            '</div>' +
-                            '</div>'
+                                '<div class="c_item_title">' + list[i].title  + '</div>' +
+                                '<div class="c_item_desc">' + list[i].description +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="c_item_info_bottom">' +
+                                '<div class="c_item_info_date">' + '2020-04-08' + '</div>' +
+                            '<div class="c_item_scan_desc">浏览量：' + list[i].scanCount + '&nbsp;' +
+                                '<button type="button" class="layui-btn layui-btn-sm">阅读全文</button>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>'
                             html = html + content
                         }
                         $("#c_list").html(html)
@@ -192,10 +203,6 @@
         display: flex;
         justify-content: flex-start;
     }
-    .c_list_item:hover {
-        background-color: #eeeeee;
-        opacity: 0.5;
-    }
     .c_item_img {
         width: 150px;
         height: 150px;
@@ -205,6 +212,7 @@
         height: 150px;
     }
     .c_item_info {
+        width: 600px;
         padding-left: 20px;
         display: flex;
         flex-direction: column;
@@ -216,15 +224,19 @@
         font-weight: 600;
     }
     .c_item_desc {
+        padding-top: 6px;
+    }
+    .c_item_info_bottom {
         font-size: 14px;
         color: #555555;
+        display: flex;
+        justify-content: space-between;
     }
     .c_item_scan_desc {
-        text-align: right;
         color: #555555;
         font-size: 12px;
     }
-    .page_area {
-        text-align: center;
+    .c_item_info_date {
+        padding-top: 6px;
     }
 </style>

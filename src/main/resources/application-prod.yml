@@ -45,5 +45,4 @@ spring:
 logging:
   config: classpath:logback-prod.xml
 
-request:
-  prefix: ''
+requestPrefix: 'http://106.12.161.232:16989'

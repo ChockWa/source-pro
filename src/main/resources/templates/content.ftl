@@ -1,4 +1,5 @@
 <#assign types = types>
+<#assign pageType = pageType>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -14,16 +15,22 @@
                 <ul class="layui-nav" lay-filter="">
                     <#list types as item >
                         <#if item.isChoose == 1>
-                            <li class="layui-nav-item layui-this"><a href="#">${item.description}</a></li>
+                            <li class="layui-nav-item layui-this"><a onclick="changeType('${item.id}')">${item.description}</a></li>
                         <#else>
-                            <li class="layui-nav-item"><a href="#">${item.description}</a></li>
+                            <li class="layui-nav-item"><a onclick="changeType('${item.id}')">${item.description}</a></li>
                         </#if>
                     </#list>
                 </ul>
             </div>
+            <#if pageType == 'list'>
             <div id="c_source" class="c_source">
 <#--                <#include "source.list.ftl">-->
             </div>
+            <#else>
+            <div class="c_detail">
+                <#include "source.detail.ftl">
+            </div>
+            </#if>
             <div id="pageId" style="text-align: center;"></div>
         </div>
         <div class="c_box_right">
@@ -31,7 +38,7 @@
                 <div style="padding-top: 10px;text-align: center;">此站为分享学习资源网站</div>
                 <hr>
                 <div style="text-align: center;line-height: 40px;">
-                    <button type="button" class="layui-btn layui-btn-sm">现在注册</button>
+                    <button type="button" class="layui-btn layui-btn-sm" onclick="registerHandle('aaaa')">现在注册</button>
                     <div>已有账号？<a>登录</a></div>
                 </div>
             </div>
@@ -44,7 +51,9 @@
 <script src="../static/layui/layui.js"></script>
 <script>
     (function () {
-        getSourcePage(1, 15)
+        if("${pageType}" == "list"){
+            getSourcePage(1, 15)
+        }
     })()
 
     function getPageInfo(pageIndex, pageSize, total) {
@@ -81,16 +90,26 @@
                     if(list.length > 0){
                         let html = ''
                         for(let i in list){
-                            var content = '<div class="c_list_item">\n' +
+                            if(list[i].description.length > 200){
+                                list[i].description = list[i].description.substr(0, 200) + "..."
+                            }
+                            var content = '<div class="c_list_item">' +
                                 '<div class="c_item_img">' +
                                 '<img src=' + list[i].cover + '>' +
                                 '</div>' +
                                 '<div class="c_item_info">' +
                                 '<div>' +
-                                '<div class="c_item_title">' + list[i].title + '</div>' +
-                                '<div class="c_item_desc">' + list[i].description + '</div>' +
+                                '<div class="c_item_title">' + list[i].title  + '</div>' +
+                                '<div class="c_item_desc">' + list[i].description +
                                 '</div>' +
-                                '<div class="c_item_scan_desc">浏览量：' + list[i].scanCount + '</div>' +
+                                '</div>' +
+                                '<div class="c_item_info_bottom">' +
+                                '<div class="c_item_info_date">' +
+                                '2020-04-08' + '&nbsp;&nbsp;&nbsp;浏览量：'+ list[i].scanCount + '</div>' +
+                                '<div class="c_item_scan_desc">' +
+                                '<button type="button" onclick="sourceDetail('+ '\'' + list[i].id + '\'' +')" class="layui-btn layui-btn-sm">阅读全文</button>' +
+                                '</div>' +
+                                '</div>' +
                                 '</div>' +
                                 '</div>'
                             html = html + content
@@ -108,6 +127,18 @@
                 }
             }
         });
+    }
+
+    function registerHandle(id) {
+        alert(id)
+    }
+
+    function changeType(typeId){
+        window.location.href = '${requestPrefix}/' + typeId + '/sources'
+    }
+
+    function sourceDetail(sourceId) {
+        window.open('${requestPrefix}/' + sourceId + '/source-detail')
     }
 
     test.onclick = function(){
@@ -184,6 +215,10 @@ a:hover {
 .layui-btn {
     background-color: #D0021B;
 }
+.c_detail {
+    width: 100%;
+    background-color: #fff;
+}
 .c_list_item {
     width: 780px;
     height: 160px;
@@ -192,10 +227,6 @@ a:hover {
     border-top: 1px solid #ededed;
     display: flex;
     justify-content: flex-start;
-}
-.c_list_item:hover {
-    background-color: #eeeeee;
-    opacity: 0.5;
 }
 .c_item_img {
     width: 150px;
@@ -206,6 +237,7 @@ a:hover {
     height: 150px;
 }
 .c_item_info {
+    width: 600px;
     padding-left: 20px;
     display: flex;
     flex-direction: column;
@@ -217,15 +249,19 @@ a:hover {
     font-weight: 600;
 }
 .c_item_desc {
+    padding-top: 6px;
+}
+.c_item_info_bottom {
     font-size: 14px;
     color: #555555;
+    display: flex;
+    justify-content: space-between;
 }
 .c_item_scan_desc {
-    text-align: right;
     color: #555555;
-    font-size: 12px;
 }
-.page_area {
-    text-align: center;
+.c_item_info_date {
+    padding-top: 6px;
+    font-size: 12px;
 }
 </style>
