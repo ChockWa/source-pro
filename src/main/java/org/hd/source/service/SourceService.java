@@ -44,7 +44,9 @@ public class SourceService {
         sourceMapper.selectPage(page, null);
         page.getRecords().forEach(e -> {
             e.setContent(null);
-            e.setCover("https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=82108016,1133623751&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=3464b52fd8de009c06fa649947f88e2b");
+            if(StringUtils.isBlank(e.getCover())){
+                e.setCover("https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=82108016,1133623751&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=3464b52fd8de009c06fa649947f88e2b");
+            }
         });
         PageResult<Source> result = new PageResult<>();
         result.setRecords(page.getRecords());
