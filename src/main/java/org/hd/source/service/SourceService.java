@@ -89,8 +89,8 @@ public class SourceService {
                     downloadInfo.setStatus(1);
                     downloadInfo.setSourceId(uuid);
                     downloadInfo.setCreateTime(new Date());
-                    if(s.contains(":")){
-                        String[] item = s.split(":");
+                    if(s.contains("|")){
+                        String[] item = s.split("|");
                         downloadInfo.setDownloadUrl(item[0]);
                         downloadInfo.setDownloadCode(item[1]);
                     }else{
@@ -109,14 +109,14 @@ public class SourceService {
             downloadInfoMapper.delete(Wrappers
                     .<DownloadInfo>lambdaQuery().eq(DownloadInfo::getSourceId, source.getId()));
             try {
-                String[] downloadInfos = sourceDto.getDownloadInfo().split("\\|");
+                String[] downloadInfos = sourceDto.getDownloadInfo().split(";");
                 for(String s : downloadInfos){
                     DownloadInfo downloadInfo = new DownloadInfo();
                     downloadInfo.setStatus(1);
                     downloadInfo.setCreateTime(new Date());
                     downloadInfo.setSourceId(source.getId());
-                    if(s.contains(":")){
-                        String[] item = s.split(":");
+                    if(s.contains("|")){
+                        String[] item = s.split("|");
                         downloadInfo.setDownloadUrl(item[0]);
                         downloadInfo.setDownloadCode(item[1]);
                     }else{
