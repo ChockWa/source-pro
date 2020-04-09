@@ -9,6 +9,7 @@ import org.hd.source.dto.PageResult;
 import org.hd.source.dto.SourceDto;
 import org.hd.source.entity.DownloadInfo;
 import org.hd.source.entity.Source;
+import org.hd.source.exception.BizException;
 import org.hd.source.mapper.DownloadInfoMapper;
 import org.hd.source.mapper.SourceMapper;
 import org.hd.source.util.UUIDUtils;
@@ -77,6 +78,9 @@ public class SourceService {
 
     @Transactional(rollbackFor = Exception.class)
     public void save(SourceDto sourceDto){
+        if(StringUtils.isBlank(sourceDto.getSource().getTypeId())){
+            throw new BizException("类型不能为空");
+        }
         Source source = sourceDto.getSource();
         if(StringUtils.isBlank(source.getId())){
             String uuid = UUIDUtils.getUuid();
