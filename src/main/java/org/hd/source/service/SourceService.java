@@ -92,7 +92,7 @@ public class SourceService {
                     downloadInfo.setSourceId(uuid);
                     downloadInfo.setCreateTime(new Date());
                     if(s.contains("|")){
-                        String[] item = s.split("|");
+                        String[] item = s.split("\\|");
                         downloadInfo.setDownloadUrl(item[0]);
                         downloadInfo.setDownloadCode(item[1]);
                     }else{
@@ -118,7 +118,7 @@ public class SourceService {
                     downloadInfo.setCreateTime(new Date());
                     downloadInfo.setSourceId(source.getId());
                     if(s.contains("|")){
-                        String[] item = s.split("|");
+                        String[] item = s.split("\\|");
                         downloadInfo.setDownloadUrl(item[0]);
                         downloadInfo.setDownloadCode(item[1]);
                     }else{
