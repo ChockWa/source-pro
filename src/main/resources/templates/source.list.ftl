@@ -1,4 +1,4 @@
-<#--<#assign sourceList = sourceInfo.records>-->
+<#assign sourceList = sourceInfo.records>
 <#--<#assign total = sourceInfo.total>-->
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
@@ -9,26 +9,26 @@
 </head>
 <body>
 <div id="c_list" class="c_list">
-    <div class="c_list_item">
-        <div class="c_item_img">
-            <img src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=82108016,1133623751&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=3464b52fd8de009c06fa649947f88e2b">
-        </div>
-        <div class="c_item_info">
-            <div>
-                <div class="c_item_title">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试?</div>
-                <div class="c_item_desc">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-                    测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-                    测测试测试测试测试测试测试
+    <#list sourceList as item>
+        <div class="c_list_item">
+            <div class="c_item_img">
+                <img src="">
+            </div>
+            <div class="c_item_info">
+                <div>
+                    <div class="c_item_title">${item.title}</div>
+                    <div class="c_item_desc">${item.description}
+                    </div>
+                </div>
+                <div class="c_item_info_bottom">
+                    <div class="c_item_info_date">2020-04-08</div>
+                    <div class="c_item_scan_desc">浏览量：${item.scanCount}&nbsp;
+                        <button type="button" class="layui-btn layui-btn-sm">阅读全文</button>
+                    </div>
                 </div>
             </div>
-            <div class="c_item_info_bottom">
-                <div class="c_item_info_date">2020-04-08</div>
-                <div class="c_item_scan_desc">浏览量：20000&nbsp;
-                    <button type="button" class="layui-btn layui-btn-sm">阅读全文</button>
-                </div>
-            </div>
         </div>
-    </div>
+    </#list>
 <#--    <div class="c_list_item">-->
 <#--        <div class="c_item_img">-->
 <#--            <img src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=82108016,1133623751&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=3464b52fd8de009c06fa649947f88e2b">-->
@@ -148,6 +148,9 @@
                     if(list.length > 0){
                         let html = ''
                         for(let i in list){
+                            if(list[i].description.length > 200){
+                                list[i].description = list[i].description.substr(0, 200) + "..."
+                            }
                             var content = '<div class="c_list_item">' +
                                 '<div class="c_item_img">' +
                                 '<img src=' + list[i].cover + '>' +
@@ -159,9 +162,10 @@
                                 '</div>' +
                                 '</div>' +
                                 '<div class="c_item_info_bottom">' +
-                                '<div class="c_item_info_date">' + '2020-04-08' + '</div>' +
-                            '<div class="c_item_scan_desc">浏览量：' + list[i].scanCount + '&nbsp;' +
-                                '<button type="button" class="layui-btn layui-btn-sm">阅读全文</button>' +
+                                '<div class="c_item_info_date">' +
+                                '2020-04-08' + '&nbsp;&nbsp;&nbsp;浏览量：'+ list[i].scanCount + '</div>' +
+                                '<div class="c_item_scan_desc">' +
+                                '<button type="button" onclick="sourceDetail('+ '\'' + list[i].id + '\'' +')" class="layui-btn layui-btn-sm">阅读全文</button>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>' +
@@ -234,9 +238,9 @@
     }
     .c_item_scan_desc {
         color: #555555;
-        font-size: 12px;
     }
     .c_item_info_date {
         padding-top: 6px;
+        font-size: 12px;
     }
 </style>

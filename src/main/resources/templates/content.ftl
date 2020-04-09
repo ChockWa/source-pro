@@ -1,28 +1,36 @@
 <#assign types = types>
-<#assign pageType = pageType>
+<#assign iframePath = iframePath>
+<#assign sourceTotal = sourceTotal>
+<#--<#assign total = sourceInfo.total>-->
 <div class="c_content">
     <div class="c_content_box">
         <div class="c_box_left">
             <div class="c_menu_nav">
-                <ul class="layui-nav" lay-filter="">
+                <ul>
                     <#list types as item >
-                        <#if item.isChoose == 1>
-                            <li class="layui-nav-item layui-this"><a onclick="changeType('${item.id}')">${item.description}</a></li>
-                        <#else>
-                            <li class="layui-nav-item"><a onclick="changeType('${item.id}')">${item.description}</a></li>
-                        </#if>
+                        <li class="c_menu_item_${item.id}" onclick="changeType('${item.id}')">${item.description}</li>
                     </#list>
                 </ul>
+<#--                <ul class="layui-nav" lay-filter="">-->
+<#--                    <#list types as item >-->
+<#--                        <#if item.isChoose == 1>-->
+<#--                            <li class="layui-nav-item layui-this"><a onclick="changeType('${item.id}')">${item.description}</a></li>-->
+<#--                        <#else>-->
+<#--                            <li class="layui-nav-item"><a onclick="changeType('${item.id}')">${item.description}</a></li>-->
+<#--                        </#if>-->
+<#--                    </#list>-->
+<#--                </ul>-->
             </div>
-            <#if pageType == 'list'>
-            <div id="c_source" class="c_source">
+            <iframe id="iframe_page" class="iframe_content" src="${requestPrefix}/${iframePath}" width="100%"  frameborder="0" scrolling="no" onload="setIframeHeight(this)"></iframe>
+<#--            <#if pageType == 'list'>-->
+<#--            <div id="c_source" class="c_source">-->
 <#--                <#include "source.list.ftl">-->
-            </div>
-            <#else>
-            <div class="c_detail">
-                <#include "source.detail.ftl">
-            </div>
-            </#if>
+<#--            </div>-->
+<#--            <#else>-->
+<#--            <div class="c_detail">-->
+<#--                <#include "source.detail.ftl">-->
+<#--            </div>-->
+<#--            </#if>-->
             <div id="pageId" style="text-align: center;"></div>
         </div>
         <div class="c_box_right">
@@ -41,12 +49,39 @@
 <script src="../static/layui/layui.js"></script>
 <script>
     (function () {
-        if("${pageType}" == "list"){
-            getSourcePage(1, 15)
-        }
+        <#--if("${pageType}" == "list"){-->
+        <#--    getSourcePage(1, 15)-->
+        <#--}-->
+        $(".c_menu_item_1").addClass("menu_choose")
+        <#--setTimeout(getPageInfo(1, 15, '${sourceTotal}'), 500)-->
     })()
 
+    var pageIndex = 1
+    var pageSize = 15
+
+    function setIframeHeight(iframe) {
+        if (iframe) {
+            if('${sourceTotal}' - pageIndex * pageSize >= 0){
+                iframe.height = 185 * 15
+            }else{
+                console.log(pageSize - ('${sourceTotal}' - (pageIndex * pageSize))*-1)
+                iframe.height = 185 * (pageSize - ('${sourceTotal}' - (pageIndex * pageSize))*-1)
+            }
+            // var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+            // if (iframeWin.document.body) {
+            //     iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+            // }
+        }
+    };
+
+    window.onload = function () {
+        setIframeHeight(document.getElementById('iframe_page'));
+        getPageInfo(pageIndex, pageSize, '${sourceTotal}')
+    };
+
     function getPageInfo(pageIndex, pageSize, total) {
+        const _this = this
+        console.log(_this.pageSize)
         layui.use(['laypage'], function(){
             var laypage = layui.laypage;
 
@@ -58,8 +93,14 @@
                 count: total,
                 jump: function(obj, first) {
                     if(!first){
-                        getSourcePage(obj.curr, obj.limit)
+                        _this.pageIndex = obj.curr
+                        _this.pageSize = obj.limit
+                        $("#iframe_page").attr('src',"${requestPrefix}/list?pageIndex="
+                            + obj.curr + "&pageSize=" + obj.limit);
                         document.body.scrollTop = document.documentElement.scrollTop = 0;
+                        setIframeHeight(document.getElementById('iframe_page'));
+                        // getSourcePage(obj.curr, obj.limit)
+                        // document.body.scrollTop = document.documentElement.scrollTop = 0;
                     }
                 }
             });})
@@ -124,7 +165,9 @@
     }
 
     function changeType(typeId){
-        window.location.href = '${requestPrefix}/' + typeId + '/sources'
+        $(".menu_choose").removeClass("menu_choose")
+        $(".c_menu_item_" + typeId).addClass("menu_choose")
+        <#--window.location.href = '${requestPrefix}/' + typeId + '/sources'-->
     }
 
     function sourceDetail(sourceId) {
@@ -147,9 +190,30 @@
         })
     }
 </script>
-<style>
+<style lang="scss">
 .c_content {
     background-color: #ededed;
+}
+.iframe_content {
+    background-color: #fff;
+}
+ul li {
+    color: #555566;
+    border: 1px solid #ddd;
+    padding: 8px;
+    margin-left: 6px;
+    font-size: 13px;
+}
+ul li:hover {
+    cursor: pointer;
+    background-color: #393D49;
+    color: #fff;
+    border: 1px solid #393D49;
+}
+.menu_choose {
+    background-color: #393D49;
+    color: #fff;
+    border: 1px solid #393D49;
 }
 .c_content_box {
     max-width: 1060px;
@@ -171,6 +235,7 @@
     background-color: #fff;
 }
 .c_menu_nav {
+    background-color: #fff;
 }
 div a {
     color: #555555

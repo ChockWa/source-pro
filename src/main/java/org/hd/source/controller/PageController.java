@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
@@ -40,8 +41,20 @@ public class PageController {
         ModelAndView mv = new ModelAndView("index");
         mv.addObject("requestPrefix", requestPrefix);
         mv.addObject("types", typeList);
+        mv.addObject("sourceTotal", sourceInfo.getTotal());
+//        mv.addObject("sourceInfo", sourceInfo);
+        mv.addObject("iframePath", "/list?pageIndex=1&pageSize=15");
+//        mv.addObject("pageType", "list");
+        return mv;
+    }
+
+    @GetMapping("/list")
+    public ModelAndView sourceList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize,
+                                   @RequestParam(required = false) String type){
+        var sourceInfo = sourceService.getSourceListPage(new PageParam(pageIndex, pageSize));
+        ModelAndView mv = new ModelAndView("source.list");
         mv.addObject("sourceInfo", sourceInfo);
-        mv.addObject("pageType", "list");
+        mv.addObject("requestPrefix", requestPrefix);
         return mv;
     }
 
